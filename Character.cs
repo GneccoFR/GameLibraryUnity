@@ -4,30 +4,30 @@ using UnityEngine;
 public abstract class Character : MonoBehaviour
 {
     //Essential components
-	Rigidbody2D myRigidBody;
-    AudioSource audioSource;
-    Animator animator;
+    protected Rigidbody2D myRigidBody;
+    protected AudioSource audioSource;
+    protected Animator animator;
 
     //Movement properties
-    Vector2 lookDirection = new Vector2(1, 0);
-    float horizontal;
-    float vertical;
+    protected Vector2 lookDirection = new Vector2(1, 0);
+    protected float horizontal;
+    protected float vertical;
     public float speed = 3f;
 
     //Health properties
     public int maxHealth = 5;
+    protected int currentHealth;
     public int health { get { return currentHealth; } }
-    int currentHealth;
-    bool alive;
+    protected bool alive;
 
     //Invincibility properties
     public float timeInvincible = 2.0f;
-    bool isInvincible;
-    float invincibleTimer;
+    protected bool isInvincible;
+    protected float invincibleTimer;
 
 
     //Builds it's main components
-    void Start()
+    protected void Start()
     {
         audioSource = GetComponent<AudioSource>();
         animator = GetComponent<Animator>();
@@ -38,7 +38,7 @@ public abstract class Character : MonoBehaviour
     }
 
     //Once per frame
-    void Update()
+    protected void Update()
     {
         //if the character is not alive halts the function
         if (!alive) return;
@@ -51,7 +51,7 @@ public abstract class Character : MonoBehaviour
     }
 
     //Once per physical tick
-    void FixedUpdate()
+    protected void FixedUpdate()
     {
         if (!alive) return;
         //Execute it's physical movement
@@ -59,7 +59,7 @@ public abstract class Character : MonoBehaviour
     }
 
     //Reduces it's invincible timer if active, or shuts it off if reached the fixed time
-    public void InvincibleCheck()
+    protected public void InvincibleCheck()
     {
         if (isInvincible)
         {
@@ -70,7 +70,7 @@ public abstract class Character : MonoBehaviour
     }
 
     //Sets the animator float values with the asked direction
-    public void MoveAnimation()
+    protected void MoveAnimation()
     {
         Vector2 move = new Vector2(horizontal, vertical);
 
@@ -82,7 +82,7 @@ public abstract class Character : MonoBehaviour
     }
 
     //checks the direction the character is facing
-    public void CheckDirection(Vector2 direction)
+    protected void CheckDirection(Vector2 direction)
     {
         if (!Mathf.Approximately(direction.x, 0.0f) || !Mathf.Approximately(direction.y, 0.0f))
         {
@@ -92,14 +92,7 @@ public abstract class Character : MonoBehaviour
     }
 
     //takes the given values for speed and direction and assigns it as movement to it's body
-    public void PhysicalMove()
-    {
-
-        Vector2 position = rigidbody2D.position;
-        position.x = position.x + speed * horizontal * Time.deltaTime;
-        position.y = position.y + speed * vertical * Time.deltaTime;
-        rigidbody2D.MovePosition(position);
-    }
+    protected abstract void PhysicalMove();
 
     public abstract void OnCollisionEvent(Collision2D collision);
 }

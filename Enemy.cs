@@ -3,15 +3,6 @@ using UnityEngine;
 
 public class Enemy : Character
 {
-    //list of it's inherent components
-	protected QuestManager questManager;
-    
-    //this is specific of the implementation
-    public AudioClip bonkClip;
-    public AudioClip fixClip;
-    public ParticleSystem smokeEffect;
-    public ParticleSystem hitEffect;
-    
     //Damage value for contact attacks
     public int enemyDamage;
     
@@ -27,17 +18,33 @@ public class Enemy : Character
         base.Start();
 
         //builds its own components
-        questManager = QuestManager.GetInstance();
         timer = changeTime;
     }
 
+    protected void PhysicalMove()
+    {
+        if (!broken)
+            return;
+
+        Vector2 position = rigidbody2D.position;
+
+        MovementPattern(bonk);
+
+        AnimationMove();
+
+        position.x = position.x + enemySpeed * Time.deltaTime * direction.x;
+        position.y = position.y + enemySpeed * Time.deltaTime * direction.y;
+        rigidbody2D.MovePosition(position);
+        bonk = false;
+    }
+
+    //List of the different collisions the enemy can have 
     protected void ProjectileCollision(Collision2D collision)
     {
         Projectile projectileCollided = collision.gameObject.GetComponent<Projectile>();
         if (projectileCollided != null)
         {
-            audioSource.PlayOneShot(bonkClip);
-            Fix();
+            //here you code what your enemy need to do in this event
         }
     }
 
@@ -46,8 +53,10 @@ public class Enemy : Character
         RubyController playerCollided = collision.gameObject.GetComponent<RubyController>();
         if (playerCollided != null)
         {
-            audioSource.PlayOneShot(bonkClip);
+            //as default, the enemy deals an amount of damage to the player by direct contact. If needed, this can be not used
             playerCollided.ChangeHealth(-enemyDamage);
+
+            //here you code what your enemy need to do in this event
         }
     }
 
@@ -57,7 +66,10 @@ public class Enemy : Character
         RubyController playerCollided = collision.gameObject.GetComponent<RubyController>();
         if (playerCollided == null && projectileCollided == null)
             bonk = true;
+
+        //here the enemy recognizes an obstacle and states that it has collided 
+        //If needed, more code can be written here
     }
 
-
+    public abstract void MovementPattern(bool bonk);
 }

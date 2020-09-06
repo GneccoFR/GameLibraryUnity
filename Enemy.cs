@@ -23,7 +23,7 @@ public class Enemy : Character
 
     protected void PhysicalMove()
     {
-        if (!broken)
+        if (!alive)
             return;
 
         Vector2 position = rigidbody2D.position;
@@ -44,7 +44,7 @@ public class Enemy : Character
         Projectile projectileCollided = collision.gameObject.GetComponent<Projectile>();
         if (projectileCollided != null)
         {
-            //here you code what your enemy need to do in this event
+            //here you code what your enemy need to do when a projectile-like object hits it
         }
     }
 
@@ -56,7 +56,7 @@ public class Enemy : Character
             //as default, the enemy deals an amount of damage to the player by direct contact. If needed, this can be not used
             playerCollided.ChangeHealth(-enemyDamage);
 
-            //here you code what your enemy need to do in this event
+            //here you code what your enemy need to do when a player-like object hits it
         }
     }
 
@@ -67,7 +67,7 @@ public class Enemy : Character
         if (playerCollided == null && projectileCollided == null)
             bonk = true;
 
-        //here the enemy recognizes an obstacle and states that it has collided 
+        //here the enemy recognizes an obstacle(or better said, a non-projectile, non-player object) and states that it has collided for it's movement instructions 
         //If needed, more code can be written here
     }
 

@@ -1,7 +1,8 @@
 ﻿using System;
 using UnityEngine;
 
-public class TopDownEnemy : Enemy
+
+public class SideScrollingEnemy : Enemy
 {
     //here executes it's collision inherited events
     protected void OnCollisionEnter2D(Collision2D collision)
@@ -28,26 +29,13 @@ public class TopDownEnemy : Enemy
             mybonk = false;
         }
 
-
         if (direction == Vector2.right && timer <= 0)
-        {
-            direction = Vector2.up;
-            timer = changeTime;
-        }
-
-        if (direction == Vector2.up && timer <= 0)
         {
             direction = Vector2.left;
             timer = changeTime;
         }
 
         if (direction == Vector2.left && timer <= 0)
-        {
-            direction = Vector2.down;
-            timer = changeTime;
-        }
-
-        if (direction == Vector2.down && timer <= 0)
         {
             direction = Vector2.right;
             timer = changeTime;
